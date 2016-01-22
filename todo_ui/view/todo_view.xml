@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        
+        <record model="ir.actions.act_window" id="action_todo_stage">
+            <field name="name">To-Do Task Stages</field>
+            <field name="res_model">todo.task.stage</field>
+            <field name="view_model">tree,form</field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="todo_app.action_todo_task">
+            <field name="name">To-Do task</field>
+            <field name="res_model">todo.task</field>
+            <field name="view_model">tree,form</field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_todo_task_stage">
+            <field name="name">To-Do Task Stages</field>
+            <field name="res_model">todo.task.stage</field>
+            <field name="src_model">todo.task</field>
+            <field name="multi">False</field>
+        </record>
+        
+        <menuitem id="menu_todo_task_main" name="To-Do" parent="mail.mail_my_stuff" />
+        
+        <menuitem 
+            id="todo_app.menu_todo_task"
+            name="To-Do Tasks"
+            parent="menu_todo_task_main"
+            sequence="10"
+            action="todo_app.action_todo_task" />
+        
+        <menuitem 
+            id="menu_todo_task_stage"
+            name="To-Do Stages"
+            parent="menu_todo_task_main"
+            sequence="20"
+            action="action_todo_stage" />
+        
+        <record id="view_form_todo_task_ui" model="ir.ui.view">
+            <field name="name">view_form_todo_task_ui</field>
+            <field name="model">todo.task</field>
+            <field name="priority" eval="15" />
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="stage_state" invisible="True" />
+                        <button
+                            name="do_toggle_done"
+                            type="object"
+                            attrs="{'invisible': [('stage_state', 'in', ['done', 'cancel'])]}"
+                            string="Toggle Done"
+                            class="oe_hignlight" />
+                        <field name="stage_id" widget="statusbar" clickable="True" options="{'fold_field': 'fold'}" />
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1><field name="name"/></h1>
+                            <h3>
+                                <span class="oe_read_only">By</span>
+                                <label for="user_id" class="oe_edit_only"/>
+                                <field name="user_id" class="oe_inline" />
+                            </h3>
+                        </div>
+                        <div name="buttons" class="oe_right oe_button_box">
+                            <button class="oe_stat_button"
+                                    type="action" icon="fa-tasks"
+                                    name="%(todo_app.action_todo_task)d"
+                                    string=""
+                                    context="{'search_default_user_id': user_id,
+                                              'default_user_id': user_id}"
+                                    help="Other to-dos for this user" >
+                                <field name="user_todo_count" string="To-dos" widget="statinfo" />
+                            </button>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    </data>
+</openerp>
